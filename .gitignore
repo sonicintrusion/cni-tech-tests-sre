@@ -1,0 +1,7 @@
+.DS_Store
+.terraform
+.vscode
+node_modules
+terraform.tfstate
+terraform.tfstate.backup
+.envrc
