@@ -25,6 +25,7 @@ What has been done:
 - the provider version is forced to ensure the container insights feature. there doesn't look like anything will break. (as-if hello world could break!)
 - there's no remote state, which is bad, but for the purpose of this test we'll stick with the local statefile.
 - the iam roles have generic names so there's overlapping scope if/when applications are deployed to the same account. adding the local.name to the names of the roles.
+- fixed the deploy script. issue with the region switch in the docker login command.
 
 What's next:
 

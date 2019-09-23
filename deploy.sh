@@ -15,9 +15,10 @@ then
     cluster_name=$(terraform output ecs_cluster_name)
     service_name=$(terraform output ecs_service_name)
     public_url=$(terraform output load_balancer_address)
+    aws_region=$(terraform output region)
 
     # Build image and login to ECR
-    login_cmd=$(aws ecr get-login --no-include-email)
+    login_cmd=$(aws ecr get-login --no-include-email --region "$aws_region")
     cd .. && docker build --rm -f "Dockerfile" -t "$repo_url" .
     eval $login_cmd
     # Push image
