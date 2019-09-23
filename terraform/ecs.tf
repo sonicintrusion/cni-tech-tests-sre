@@ -3,7 +3,7 @@ resource "aws_ecr_repository" "ecr_repo" {
 }
 
 resource "aws_ecs_cluster" "cluster" {
-  name = "${var.app_name}-${var.environment}-ecs-cluster"
+  name = "${local.name}-ecs-cluster"
 }
 
 resource "aws_ecs_task_definition" "web_task" {
@@ -26,7 +26,7 @@ resource "aws_ecs_task_definition" "web_task" {
     "logConfiguration": {
       "logDriver": "awslogs",
       "options": {
-        "awslogs-group": "/ecs/${var.app_name}-${var.environment}",
+        "awslogs-group": "/ecs/${local.name}",
         "awslogs-region": "${var.region}",
         "awslogs-stream-prefix": "ecs-fargate"
       }
@@ -40,14 +40,15 @@ JSON
   cpu                      = "256"
   memory                   = "512"
   execution_role_arn       = "${aws_iam_role.ecs_execution_role.arn}"
+
   depends_on = [
-    "aws_cloudwatch_log_group.ecs_log_grp"
+    "aws_cloudwatch_log_group.ecs_log_grp",
   ]
 }
 
 resource "aws_security_group" "ecs_service" {
   vpc_id      = "${aws_vpc.vpc.id}"
-  name        = "${var.app_name}-${var.environment}-ecs-service-sg"
+  name        = "${local.name}-ecs-service-sg"
   description = "Allow egress from container"
 
   # Entering
@@ -66,11 +67,12 @@ resource "aws_security_group" "ecs_service" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
-  tags {
-    name        = "${var.app_name}-${var.environment}-ecs-service-sg"
-    environment = "${var.environment}"
-    managed_by = "${var.managed_by}"
-  }
+  tags = "${merge(
+        local.common_tags,
+        map(
+            "name", "${local.name}-ecs-service-sg"
+        )
+    )}"
 }
 
 resource "aws_ecs_service" "web" {
@@ -108,11 +110,12 @@ resource "aws_iam_role_policy" "ecs_execution_role_policy" {
 }
 
 resource "aws_cloudwatch_log_group" "ecs_log_grp" {
-  name = "/ecs/${var.app_name}-${var.environment}"
+  name = "/ecs/${local.name}"
 
-  tags {
-    name        = "${var.app_name}-${var.environment}-log-group"
-    environment = "${var.environment}"
-    managed_by   = "${var.managed_by}"
-  }
+  tags = "${merge(
+          local.common_tags,
+          map(
+              "name", "${local.name}-log-group"
+          )
+      )}"
 }

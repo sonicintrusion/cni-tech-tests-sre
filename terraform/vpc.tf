@@ -5,21 +5,23 @@ resource "aws_vpc" "vpc" {
   enable_dns_hostnames = true
   enable_dns_support   = true
 
-  tags {
-    name        = "${var.app_name}-${var.environment}-vpc"
-    environment = "${var.environment}"
-    managed_by  = "${var.managed_by}"
-  }
+  tags = "${merge(
+          local.common_tags,
+          map(
+              "name", "${local.name}-vpc"
+          )
+      )}"
 }
 
 resource "aws_internet_gateway" "ig" {
   vpc_id = "${aws_vpc.vpc.id}"
 
-  tags {
-    name        = "${var.app_name}-${var.environment}-ig"
-    environment = "${var.environment}"
-    managed_by  = "${var.managed_by}"
-  }
+  tags = "${merge(
+          local.common_tags,
+          map(
+              "name", "${local.name}-ig"
+          )
+      )}"
 }
 
 resource "aws_eip" "nat" {
@@ -40,11 +42,12 @@ resource "aws_subnet" "public" {
   availability_zone       = "${data.aws_availability_zones.available.names[count.index]}"
   map_public_ip_on_launch = false
 
-  tags {
-    name        = "${var.app_name}-${var.environment}-public-subnet-${count.index}"
-    environment = "${var.environment}"
-    managed_by  = "${var.managed_by}"
-  }
+  tags = "${merge(
+          local.common_tags,
+          map(
+              "name", "${local.name}-public-subnet-${count.index}"
+          )
+      )}"
 }
 
 resource "aws_subnet" "private" {
@@ -54,11 +57,12 @@ resource "aws_subnet" "private" {
   availability_zone       = "${data.aws_availability_zones.available.names[count.index]}"
   map_public_ip_on_launch = false
 
-  tags {
-    name        = "${var.app_name}-${var.environment}-private-subnet-${count.index}"
-    environment = "${var.environment}"
-    managed_by  = "${var.managed_by}"
-  }
+  tags = "${merge(
+          local.common_tags,
+          map(
+              "name", "${local.name}-private-subnet-${count.index}"
+          )
+      )}"
 }
 
 resource "aws_route_table" "public" {
@@ -70,11 +74,12 @@ resource "aws_route_table" "public" {
     gateway_id = "${aws_internet_gateway.ig.id}"
   }
 
-  tags {
-    name        = "${var.app_name}-${var.environment}-public-routes"
-    environment = "${var.environment}"
-    managed_by  = "${var.managed_by}"
-  }
+  tags = "${merge(
+          local.common_tags,
+          map(
+              "name", "${local.name}-public-routes"
+          )
+      )}"
 }
 
 resource "aws_route_table" "private" {
@@ -86,11 +91,12 @@ resource "aws_route_table" "private" {
     nat_gateway_id = "${element(aws_nat_gateway.gw.*.id, count.index)}"
   }
 
-  tags {
-    name        = "${var.app_name}-${var.environment}-private-routes"
-    environment = "${var.environment}"
-    managed_by  = "${var.managed_by}"
-  }
+  tags = "${merge(
+          local.common_tags,
+          map(
+              "name", "${local.name}-private-routes"
+          )
+      )}"
 }
 
 resource "aws_route_table_association" "public" {
