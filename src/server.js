@@ -29,6 +29,7 @@ winston.loggers.add('awslogs', {
 });
 
 var logit = winston.loggers.get('awslogs');
+logit.info('Info message in log');
 logit.error('ERROR logged to console and cloudwatch logs');
 
 // this function can be used to pass in errors that will be logged out to both console and logs
