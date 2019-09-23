@@ -3,8 +3,12 @@ resource "aws_ecr_repository" "ecr_repo" {
 }
 
 resource "aws_ecs_cluster" "cluster" {
-  name               = "${local.name}-ecs-cluster"
-  container_insights = "${var.insights_enabled}"
+  name = "${local.name}-ecs-cluster"
+
+  setting = {
+    name  = "containerInsights"
+    value = "${var.insights_enabled}"
+  }
 }
 
 resource "aws_ecs_task_definition" "web_task" {
