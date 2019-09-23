@@ -59,3 +59,8 @@ The monitoring in this respect should also react to scaling. As containers start
 ### Documentation is important to us. We have keen eye on how you present the information and how can it be used.
 
 I hope this has been a nice read...
+
+## Future development
+
+1. deploy a common container platform (probably kubernetes) and implement daemonsets or side cars to handle all monitoring and logging without the need to define it within the application project.
+1. employ saas providers (managed service) to handle the data (logs and metrics). the data is highly available but also the management of the underlying infrastructure sits with them. the service also provides dashboards and inergrations into downstream alerting services. example is splunk for logging and datadog for metrics integrating into pagerduty for notifications.
