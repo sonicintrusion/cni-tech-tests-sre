@@ -31,3 +31,8 @@ variable "repository_name" {
   default     = "node-hello-world"
   description = "Name for Docker repo"
 }
+
+variable "insights_enabled" {
+  description = "toggle to enable container insights"
+  default = true
+}
