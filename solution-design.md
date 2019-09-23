@@ -22,10 +22,11 @@ What has been done:
 - i can see that awslogs is being implemented as part of the deployment, which is good.
 - also, the use of fargate automatically implements the available cloudwatch metrics on the cluster. also good.
 - enabling container insights. the code for this is obscure because we might not want to enable insights for all containers, just ones we're interested in - like in prod or pre-prod and not dev or sandbox. the terraform module needs rewriting so that we can accomodate different use cases for different environments. for now we default to true so that it is enabled for all deployments.
+- the provider version is forced to ensure the container insights feature. there doesn't look like anything will break. (as-if hello world could break!)
 - there's no remote state, which is bad, but for the purpose of this test we'll stick with the local statefile.
 - the iam roles have generic names so there's overlapping scope if/when applications are deployed to the same account. adding the local.name to the names of the roles.
 
 What's next:
 
-- create cloudwatch alarms to help monitor the application containers and ecs cluster
+- create cloudwatch alarms to help monitor the application containers and ecs cluster - we need to employ an SNS queue to received these alarms.
 - find a good APM to help monitor application performance
