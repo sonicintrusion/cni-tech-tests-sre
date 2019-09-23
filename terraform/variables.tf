@@ -34,5 +34,5 @@ variable "repository_name" {
 
 variable "insights_enabled" {
   description = "toggle to enable container insights"
-  default = true
+  default     = true
 }

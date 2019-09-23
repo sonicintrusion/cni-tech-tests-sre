@@ -3,7 +3,7 @@ resource "aws_ecr_repository" "ecr_repo" {
 }
 
 resource "aws_ecs_cluster" "cluster" {
-  name = "${local.name}-ecs-cluster",
+  name               = "${local.name}-ecs-cluster"
   container_insights = "${var.insights_enabled}"
 }
 
