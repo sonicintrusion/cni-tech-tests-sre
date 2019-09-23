@@ -12,28 +12,34 @@ var winston = require('winston'),
 // date used to rotate log streams - per day
 let date = new Date().toISOString().split('T')[0];
 
-// log errors to both console and cloudwatch logs
-winston.loggers.add('errors', {
+// log to both console and cloudwatch logs
+winston.loggers.add('awslogs', {
     transports: [
       new winston.transports.Console({
         json: true,
         colorize: true,
-        level: 'error'
+        level: 'info'
       }),
       new WinstonCloudWatch({
         logGroupName: '/app/' + app_name,
-        logStreamName: app_name + '-errors-' + date,
+        logStreamName: app_name + '-' + date,
         awsRegion: aws_region
       })
     ]
 });
 
-var logit = winston.loggers.get('errors');
+var logit = winston.loggers.get('awslogs');
 logit.error('ERROR logged to console and cloudwatch logs');
 
 // this function can be used to pass in errors that will be logged out to both console and logs
 function logerror(err,req,res,next) {
   logit.error(err)
+  next()
+}
+
+// this function can be used to pass in all logging information
+function logall(req,res,next) {
+  logit.info(req.url)
   next()
 }
 
