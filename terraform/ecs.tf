@@ -104,12 +104,12 @@ resource "aws_ecs_service" "web" {
 
 /* Role that the Amazon ECS container agent and the Docker daemon can assume */
 resource "aws_iam_role" "ecs_execution_role" {
-  name               = "ecs-task-execution-role"
+  name               = "${local.name}-ecs-task-execution-role"
   assume_role_policy = "${file("policies/ecs-assume-role-policy.json")}"
 }
 
 resource "aws_iam_role_policy" "ecs_execution_role_policy" {
-  name   = "ecs-execution-role-policy"
+  name   = "${local.name}-ecs-execution-role-policy"
   policy = "${file("policies/ecs-execution-role-policy.json")}"
   role   = "${aws_iam_role.ecs_execution_role.id}"
 }
