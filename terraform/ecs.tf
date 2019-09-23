@@ -81,7 +81,7 @@ resource "aws_security_group" "ecs_service" {
 }
 
 resource "aws_ecs_service" "web" {
-  name            = "${var.app_name}-${var.environment}-web"
+  name            = "${local.name}-web"
   task_definition = "${aws_ecs_task_definition.web_task.arn}"
   desired_count   = 2
   launch_type     = "FARGATE"
