@@ -26,7 +26,7 @@ then
 
     # Trigger a new deployment of the fargat containers.
     echo "Triggering app deployment!"
-    aws ecs update-service --cluster $cluster_name --service $service_name --force-new-deployment
+    AWS_DEFAULT_REGION=$aws_region aws ecs update-service --cluster $cluster_name --service $service_name --force-new-deployment
     echo "Deployment complete!"
 
     # Echo important info
