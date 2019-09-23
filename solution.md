@@ -28,6 +28,7 @@
 - fixed the deploy script. issue with the region switch in the docker login command.
 - also fixed the region in the update-service command.
 - all above has been tested and working completely. the ALB endpoint provides the intended output "hello world". the container insights show the metrics from the ECS cluster (ie the single container).
+- noticed that the app doesn't actually have any logging routines. it'll be hard to introduce logging into the logic of a hello world application because there's no real business logic behind loading that to the screen. we should consider that there are some well know logging frameworks that could be employed. even sacrificing the efficiency of writing code in order to ensure better instrumented code. there are now tools/libraries to integrate the logging framework into awslogs, which is already available. winston-cloudwatch is a package that provides this option using well known winston library.
 
 ### What's next
 
@@ -59,3 +60,8 @@ The monitoring in this respect should also react to scaling. As containers start
 ### Documentation is important to us. We have keen eye on how you present the information and how can it be used.
 
 I hope this has been a nice read...
+
+## Future development
+
+1. deploy a common container platform (probably kubernetes) and implement daemonsets or side cars to handle all monitoring and logging without the need to define it within the application project.
+1. employ saas providers (managed service) to handle the data (logs and metrics). the data is highly available but also the management of the underlying infrastructure sits with them. the service also provides dashboards and inergrations into downstream alerting services. example is splunk for logging and datadog for metrics integrating into pagerduty for notifications.
